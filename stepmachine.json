@@ -1,0 +1,49 @@
+{
+  "Comment": "An example that adds two numbers together.",
+  "StartAt": "First Glue StartJob",
+  "Version": "1.0",
+  "TimeoutSeconds": 30000,
+  "States": {
+    "First Glue StartJob": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::glue:startJobRun.sync",
+      "Parameters": {
+        "JobName": "FirstGlueJob"
+      },
+      "Next": "Second Glue StartJob",
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "States.TaskFailed"
+          ],
+          "Next": "fallback"
+        }
+      ]
+    },
+    "Second Glue StartJob": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::glue:startJobRun.sync",
+      "Parameters": {
+        "JobName": "SecondGlueJob"
+      },
+      "End": true,
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "States.TaskFailed"
+          ],
+          "Next": "fallback"
+        }
+      ]
+    },
+    "fallback": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::sns:publish",
+      "Parameters": {
+        "Message": "Glue job submitted through Step Functions failed",
+        "TopicArn": "arn:aws:sns:us-west-2:216441341012:myAirSNS"
+      },
+      "End": true
+    }
+  }
+}
