@@ -41,7 +41,7 @@
       "Resource": "arn:aws:states:::sns:publish",
       "Parameters": {
         "Message": "Glue job submitted through Step Functions failed",
-        "TopicArn": "arn:aws:sns:us-west-2:216441341012:myAirSNS"
+        "TopicArn": "arn:aws:sns:xxxxxxxx:xxxxxxxxxxx:mySNS"
       },
       "End": true
     }
